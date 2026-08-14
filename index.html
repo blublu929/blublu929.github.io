@@ -3,78 +3,919 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blu - 展示页面</title>
+  <title>Blu - 生活记录</title>
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #0b1020;
-      --panel: rgba(255, 255, 255, 0.08);
-      --line: rgba(255, 255, 255, 0.16);
-      --text: #f8fafc;
-      --muted: rgba(248, 250, 252, 0.68);
-      --accent: #24d6b5;
+      color-scheme: light;
+      --ink: #2d241d;
+      --muted: rgba(45, 36, 29, .64);
+      --soft: #f8f2e8;
+      --paper: rgba(255, 252, 246, .86);
+      --paper-strong: #fffaf1;
+      --line: rgba(78, 57, 37, .16);
+      --leaf: #3f7d58;
+      --rose: #cf6f69;
+      --sky: #6c9fc7;
+      --sun: #d49a3d;
+      --shadow: 0 24px 80px rgba(77, 54, 32, .16);
+      --radius: 20px;
+      --font: Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
-      color: var(--text);
+      font-family: var(--font);
+      color: var(--ink);
       background:
-        radial-gradient(circle at 18% 18%, rgba(36, 214, 181, 0.18), transparent 30%),
-        radial-gradient(circle at 82% 30%, rgba(89, 130, 246, 0.16), transparent 28%),
-        linear-gradient(135deg, #080b16, var(--bg));
+        radial-gradient(circle at 12% 8%, rgba(207, 111, 105, .18), transparent 26%),
+        radial-gradient(circle at 82% 12%, rgba(108, 159, 199, .16), transparent 28%),
+        linear-gradient(135deg, #fffaf1 0%, #f6ecd9 45%, #edf5ec 100%);
+      overflow-x: hidden;
     }
 
-    main {
-      width: min(720px, calc(100vw - 40px));
-      padding: 40px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: var(--panel);
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
-      backdrop-filter: blur(18px);
-    }
-
-    h1 {
-      margin: 0 0 14px;
-      font-size: clamp(32px, 6vw, 56px);
-      line-height: 1;
-    }
-
-    p {
-      margin: 0 0 28px;
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.7;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(78,57,37,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(78,57,37,.055) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.52), transparent 74%);
     }
 
     a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .site {
+      width: min(1180px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 14px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      width: min(760px, 100%);
+      margin: 0 auto 46px;
+      padding: 8px 10px 8px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 252, 246, .72);
+      box-shadow: 0 12px 36px rgba(77, 54, 32, .12);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      gap: 4px;
+    }
+
+    .nav a {
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .nav a:hover {
+      color: var(--ink);
+      background: rgba(63, 125, 88, .1);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
+      gap: 42px;
+      align-items: end;
+      min-height: calc(100vh - 140px);
+      padding: 22px 0 58px;
+    }
+
+    .eyebrow {
+      margin-bottom: 18px;
+      color: var(--leaf);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 780px;
+      font-size: clamp(46px, 6.6vw, 88px);
+      line-height: 1.03;
+      letter-spacing: -.045em;
+    }
+
+    h2 {
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+
+    .lead {
+      max-width: 700px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: clamp(16px, 1.6vw, 20px);
+      line-height: 1.8;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .tag {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0 18px;
-      border: 1px solid rgba(36, 214, 181, 0.5);
+      min-height: 34px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
       border-radius: 999px;
-      color: #05140f;
-      background: var(--accent);
-      font-weight: 700;
-      text-decoration: none;
+      background: rgba(255, 252, 246, .56);
+      color: rgba(45, 36, 29, .7);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .hero-card {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid rgba(78, 57, 37, .18);
+      border-radius: 28px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-card img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+    }
+
+    .hero-note {
+      padding: 22px;
+    }
+
+    .hero-note time {
+      display: block;
+      color: var(--rose);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .hero-note h3 {
+      font-size: 24px;
+      line-height: 1.25;
+      letter-spacing: -.02em;
+      margin-bottom: 12px;
+    }
+
+    .hero-note p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .corner-stamp {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      padding: 9px 11px;
+      border-radius: 999px;
+      background: rgba(255, 250, 241, .82);
+      color: rgba(45, 36, 29, .72);
+      font-size: 12px;
+      font-weight: 850;
+      box-shadow: 0 10px 28px rgba(77, 54, 32, .12);
+    }
+
+    .section {
+      padding: 78px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .section-head p {
+      max-width: 460px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .journal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .journal-card {
+      min-height: 250px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 252, 246, .68);
+      box-shadow: 0 18px 48px rgba(77, 54, 32, .1);
+    }
+
+    .journal-card time {
+      display: block;
+      margin-bottom: 48px;
+      color: var(--sky);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .journal-card h3 {
+      font-size: 23px;
+      line-height: 1.25;
+      letter-spacing: -.025em;
+      margin-bottom: 12px;
+    }
+
+    .journal-card p {
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.75;
+    }
+
+    .gallery-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(340px, .98fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .album-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .album-card {
+      position: relative;
+      min-height: 310px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 252, 246, .76);
+      box-shadow: 0 18px 48px rgba(77, 54, 32, .1);
+      cursor: pointer;
+      text-align: left;
+      color: inherit;
+      overflow: hidden;
+    }
+
+    .album-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 4px;
+      background: linear-gradient(90deg, var(--leaf), var(--sky), var(--rose), var(--sun));
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+
+    .album-card.is-selected::before,
+    .album-card:hover::before {
+      opacity: 1;
+    }
+
+    .album-title {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .album-title h3 {
+      font-size: 20px;
+      line-height: 1.25;
+      letter-spacing: -.02em;
+    }
+
+    .album-title span {
+      flex: 0 0 auto;
+      color: var(--rose);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .stack {
+      position: relative;
+      height: 188px;
+      margin: 8px 0 16px;
+    }
+
+    .thumb {
+      position: absolute;
+      inset: 0;
+      width: 78%;
+      height: 164px;
+      border: 8px solid #fffaf1;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 16px 40px rgba(77, 54, 32, .22);
+      transform-origin: center 115%;
+      transition: transform .55s ease, opacity .55s ease, filter .55s ease;
+    }
+
+    .thumb:nth-child(1) { left: 2%; top: 8px; }
+    .thumb:nth-child(2) { left: 14%; top: 16px; }
+    .thumb:nth-child(3) { left: 8%; top: 2px; }
+    .thumb:nth-child(4) { left: 19%; top: 24px; }
+
+    .album-card p {
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.68;
+    }
+
+    .preview {
+      position: sticky;
+      top: 94px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--paper-strong);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .preview-media {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      background: #efe2cf;
+      overflow: hidden;
+    }
+
+    .preview-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity .25s ease, transform .35s ease;
+    }
+
+    .preview-count {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(255, 250, 241, .82);
+      color: rgba(45, 36, 29, .72);
+      font-size: 12px;
+      font-weight: 900;
+      backdrop-filter: blur(14px);
+    }
+
+    .preview-caption {
+      padding: 22px;
+    }
+
+    .preview-caption .place {
+      color: var(--leaf);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .preview-caption h3 {
+      font-size: 26px;
+      line-height: 1.2;
+      letter-spacing: -.025em;
+      margin-bottom: 12px;
+    }
+
+    .preview-caption p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .mini-strip {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .mini-strip button {
+      width: 58px;
+      height: 46px;
+      padding: 0;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      background: transparent;
+      cursor: pointer;
+      overflow: hidden;
+      opacity: .72;
+    }
+
+    .mini-strip button.is-active {
+      border-color: var(--leaf);
+      opacity: 1;
+    }
+
+    .mini-strip img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .work-corner {
+      position: fixed;
+      right: 12px;
+      bottom: 10px;
+      z-index: 40;
+      padding: 5px 7px;
+      border: 1px solid rgba(78, 57, 37, .12);
+      border-radius: 999px;
+      background: rgba(255, 252, 246, .62);
+      color: rgba(45, 36, 29, .36);
+      font-size: 10px;
+      font-weight: 800;
+      backdrop-filter: blur(12px);
+    }
+
+    .work-corner:hover {
+      color: rgba(45, 36, 29, .72);
+    }
+
+    @media (max-width: 920px) {
+      .site {
+        width: min(100% - 32px, 720px);
+        padding-top: 18px;
+      }
+
+      .topbar {
+        margin-bottom: 28px;
+      }
+
+      .nav a {
+        padding: 8px 10px;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        min-height: auto;
+        padding: 28px 0 48px;
+      }
+
+      h1 {
+        font-size: clamp(42px, 12vw, 64px);
+        line-height: .98;
+      }
+
+      .hero-card {
+        min-height: auto;
+        border-radius: 22px;
+      }
+
+      .hero-card img {
+        height: 260px;
+      }
+
+      .section {
+        padding: 54px 0;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-head p {
+        margin-top: 14px;
+      }
+
+      .journal-grid,
+      .gallery-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .journal-card {
+        min-height: auto;
+      }
+
+      .journal-card time {
+        margin-bottom: 26px;
+      }
+
+      .preview {
+        position: relative;
+        top: auto;
+      }
+    }
+
+    @media (max-width: 620px) {
+      body::before {
+        background-size: 36px 36px;
+      }
+
+      .site {
+        width: calc(100% - 28px);
+        padding-bottom: 58px;
+      }
+
+      .topbar {
+        position: relative;
+        top: auto;
+        padding: 10px 12px;
+        border-radius: 18px;
+      }
+
+      .brand {
+        font-size: 12px;
+      }
+
+      .nav {
+        gap: 0;
+      }
+
+      .nav a {
+        padding: 7px 8px;
+        font-size: 12px;
+      }
+
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: .2em;
+      }
+
+      .lead {
+        font-size: 15.5px;
+      }
+
+      .hero-meta {
+        margin-top: 22px;
+        gap: 8px;
+      }
+
+      .tag {
+        min-height: 31px;
+        font-size: 12px;
+      }
+
+      .album-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .album-card {
+        min-height: 286px;
+        padding: 16px;
+      }
+
+      .stack {
+        height: 172px;
+      }
+
+      .thumb {
+        height: 150px;
+      }
+
+      .preview-media {
+        aspect-ratio: 1 / 1;
+      }
+
+      .mini-strip button {
+        width: 52px;
+        height: 42px;
+      }
+
+      .work-corner {
+        right: 8px;
+        bottom: 8px;
+        font-size: 9px;
+      }
     }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Blu</h1>
-    <p>这里会逐步整理成个人网站。当前绚星平台产品迭代与AI能力升级说明展示页面已放在 /showai/ 路径下。</p>
-    <a href="/showai/">打开 ShowAI 展示页</a>
+  <a class="work-corner" href="/showai/">work</a>
+  <main class="site">
+    <header class="topbar">
+      <a class="brand" href="#">Blu Life Log</a>
+      <nav class="nav" aria-label="页面导航">
+        <a href="#journal">记录</a>
+        <a href="#pets">Pet Gallery</a>
+        <a href="#places">地点</a>
+      </nav>
+    </header>
+
+    <section class="hero" id="top">
+      <div>
+        <div class="eyebrow">Life Record</div>
+        <h1>把日常、散步和宠物出游慢慢收成一本生活画集。</h1>
+        <p class="lead">这里会放一些平常的生活记录：去过的地方、当天的天气、路上的小事，还有宠物在每个地点留下的照片。</p>
+        <div class="hero-meta">
+          <span class="tag">生活片段</span>
+          <span class="tag">宠物相册</span>
+          <span class="tag">地点记忆</span>
+        </div>
+      </div>
+
+      <article class="hero-card">
+        <span class="corner-stamp">recent</span>
+        <img alt="宠物在草地上玩耍" src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=900&q=80">
+        <div class="hero-note">
+          <time>Weekend Walk</time>
+          <h3>天气好的时候，照片会自己变成日记。</h3>
+          <p>没有特别宏大的事情，只是一次出门、几张照片、一个地点名，后来回看时就会想起那天的风。</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="journal">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Journal</div>
+          <h2>生活记录</h2>
+        </div>
+        <p>先留出几张记录卡，后面可以按时间继续往下加，把照片和短句变成轻量的生活档案。</p>
+      </div>
+
+      <div class="journal-grid">
+        <article class="journal-card">
+          <time>Spring Afternoon</time>
+          <h3>路边的花开得很认真</h3>
+          <p>散步路线没有计划，只是看到阳光不错，就多绕了一段路。宠物在草边闻了很久，好像每一棵草都有新闻。</p>
+        </article>
+        <article class="journal-card">
+          <time>Late Coffee</time>
+          <h3>咖啡店门口的小停留</h3>
+          <p>人坐下来，宠物也坐下来。城市的声音从身边过去，照片里只剩一个很安静的下午。</p>
+        </article>
+        <article class="journal-card">
+          <time>Park Route</time>
+          <h3>固定路线也会有新发现</h3>
+          <p>同一个公园，每次去都有一点不同。今天是云、树影和一张刚好看向镜头的照片。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="pets">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Pet Gallery</div>
+          <h2>宠物画廊</h2>
+        </div>
+        <p>按地点收藏每次出游的小表情、路上的风景和那些刚好看向镜头的瞬间。</p>
+      </div>
+
+      <div class="gallery-shell">
+        <div class="album-grid" id="albumGrid"></div>
+
+        <aside class="preview" aria-live="polite">
+          <div class="preview-media">
+            <img id="previewImage" alt="">
+            <span class="preview-count" id="previewCount"></span>
+          </div>
+          <div class="preview-caption">
+            <div class="place" id="previewPlace"></div>
+            <h3 id="previewTitle"></h3>
+            <p id="previewNote"></p>
+            <div class="mini-strip" id="miniStrip"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="places">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Places</div>
+          <h2>地点索引</h2>
+        </div>
+        <p>以后每次带宠物出去玩，都可以按地点追加一组照片。地点名就是这一页最自然的章节标题。</p>
+      </div>
+
+      <div class="journal-grid">
+        <article class="journal-card">
+          <time>01</time>
+          <h3>公园</h3>
+          <p>适合放奔跑、草地、长椅和黄昏照片。</p>
+        </article>
+        <article class="journal-card">
+          <time>02</time>
+          <h3>海边</h3>
+          <p>适合放风、浪、脚印和湿漉漉的快乐。</p>
+        </article>
+        <article class="journal-card">
+          <time>03</time>
+          <h3>街角</h3>
+          <p>适合放咖啡店、路牌、橱窗和偶遇。</p>
+        </article>
+      </div>
+    </section>
   </main>
+
+  <script>
+    const petAlbums = [
+      {
+        place: "滨江草地",
+        date: "Apr 06",
+        title: "风很轻，跑得很远",
+        note: "沿着江边慢慢走，宠物一路在草地和树影之间切换频道。",
+        photos: [
+          "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=900&q=80"
+        ]
+      },
+      {
+        place: "海边栈道",
+        date: "May 18",
+        title: "浪声把时间放慢",
+        note: "照片里有海风、木栈道和一直想往前看的小脑袋。",
+        photos: [
+          "https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1525253086316-d0c936c814f8?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=900&q=80"
+        ]
+      },
+      {
+        place: "城市咖啡店",
+        date: "Jun 02",
+        title: "门口坐一会儿",
+        note: "等咖啡的时候拍了几张，玻璃反光和尾巴摇动都刚刚好。",
+        photos: [
+          "https://images.unsplash.com/photo-1592194996308-7b43878e84a6?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1494256997604-768d1f608cac?auto=format&fit=crop&w=900&q=80"
+        ]
+      },
+      {
+        place: "山间步道",
+        date: "Jul 11",
+        title: "树影像一条慢慢展开的路",
+        note: "走到半路停下来喝水，宠物已经把这段路巡视成自己的小领地。",
+        photos: [
+          "https://images.unsplash.com/photo-1601758124510-52d02ddb7cbd?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=900&q=80",
+          "https://images.unsplash.com/photo-1561037404-61cd46aa615b?auto=format&fit=crop&w=900&q=80"
+        ]
+      }
+    ];
+
+    const albumGrid = document.getElementById("albumGrid");
+    const previewImage = document.getElementById("previewImage");
+    const previewCount = document.getElementById("previewCount");
+    const previewPlace = document.getElementById("previewPlace");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewNote = document.getElementById("previewNote");
+    const miniStrip = document.getElementById("miniStrip");
+
+    const state = {
+      selectedAlbum: 0,
+      selectedPhoto: 0,
+      rotations: petAlbums.map(() => 0)
+    };
+
+    function stackStyle(photoIndex, activeIndex) {
+      const offset = (photoIndex - activeIndex + 4) % 4;
+      const styles = [
+        "translate(18%, 2px) rotate(4deg) scale(1); z-index: 4; opacity: 1; filter: saturate(1.04);",
+        "translate(3%, 12px) rotate(-8deg) scale(.94); z-index: 3; opacity: .86; filter: saturate(.92);",
+        "translate(28%, 20px) rotate(10deg) scale(.88); z-index: 2; opacity: .68; filter: saturate(.84);",
+        "translate(8%, 0) rotate(-14deg) scale(.82); z-index: 1; opacity: .48; filter: saturate(.76);"
+      ];
+      return styles[offset];
+    }
+
+    function renderAlbums() {
+      albumGrid.innerHTML = petAlbums.map((album, albumIndex) => {
+        const activeIndex = state.rotations[albumIndex] % album.photos.length;
+        const thumbs = album.photos.map((src, photoIndex) => (
+          `<img class="thumb" alt="${album.place} 宠物照片 ${photoIndex + 1}" src="${src}" data-album="${albumIndex}" data-photo="${photoIndex}" style="transform: ${stackStyle(photoIndex, activeIndex)}">`
+        )).join("");
+
+        return `
+          <button class="album-card ${albumIndex === state.selectedAlbum ? "is-selected" : ""}" type="button" data-album="${albumIndex}">
+            <div class="album-title">
+              <h3>${album.place}</h3>
+              <span>${album.date}</span>
+            </div>
+            <div class="stack">${thumbs}</div>
+            <p>${album.note}</p>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderPreview() {
+      const album = petAlbums[state.selectedAlbum];
+      const photo = album.photos[state.selectedPhoto];
+      previewImage.style.opacity = "0";
+      setTimeout(() => {
+        previewImage.src = photo;
+        previewImage.alt = `${album.place} - ${album.title}`;
+        previewImage.style.opacity = "1";
+      }, 120);
+      previewCount.textContent = `${state.selectedPhoto + 1} / ${album.photos.length}`;
+      previewPlace.textContent = album.place;
+      previewTitle.textContent = album.title;
+      previewNote.textContent = album.note;
+      miniStrip.innerHTML = album.photos.map((src, index) => (
+        `<button type="button" class="${index === state.selectedPhoto ? "is-active" : ""}" data-photo="${index}" aria-label="${album.place} 第 ${index + 1} 张照片"><img alt="" src="${src}"></button>`
+      )).join("");
+    }
+
+    function selectPhoto(albumIndex, photoIndex) {
+      state.selectedAlbum = albumIndex;
+      state.selectedPhoto = photoIndex;
+      renderAlbums();
+      renderPreview();
+    }
+
+    albumGrid.addEventListener("click", (event) => {
+      const thumb = event.target.closest(".thumb");
+      const card = event.target.closest(".album-card");
+      if (thumb) {
+        selectPhoto(Number(thumb.dataset.album), Number(thumb.dataset.photo));
+        return;
+      }
+      if (card) {
+        const albumIndex = Number(card.dataset.album);
+        selectPhoto(albumIndex, state.rotations[albumIndex] % petAlbums[albumIndex].photos.length);
+      }
+    });
+
+    miniStrip.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-photo]");
+      if (!button) return;
+      selectPhoto(state.selectedAlbum, Number(button.dataset.photo));
+    });
+
+    setInterval(() => {
+      state.rotations = state.rotations.map((value, index) => (value + 1) % petAlbums[index].photos.length);
+      if (document.visibilityState === "visible") {
+        renderAlbums();
+      }
+    }, 2800);
+
+    renderAlbums();
+    renderPreview();
+  </script>
 </body>
 </html>
